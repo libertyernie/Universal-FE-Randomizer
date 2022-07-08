@@ -1023,7 +1023,8 @@ public class MainView implements FileFlowDelegate {
 					
 					if (type == GameType.FE7) {
 						try {
-							compiler.addDiffsFromFile("tutorialSlayer");
+							throw new IOException("Not applying patch because we just want to dump the item locations");
+							//compiler.addDiffsFromFile("tutorialSlayer");
 						} catch (IOException e) {
 							MessageBox tutorialSlayerFail = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK | SWT.CANCEL);
 							tutorialSlayerFail.setText("Error");

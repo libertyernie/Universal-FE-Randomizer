@@ -6,13 +6,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import fedata.gba.GBAFEChapterData;
 import fedata.gba.GBAFEChapterItemData;
+import fedata.gba.GBAFEChapterTargetedItemData;
 import fedata.gba.GBAFEChapterUnitData;
 import fedata.gba.GBAFECharacterData;
 import fedata.gba.GBAFEClassData;
@@ -577,6 +580,61 @@ public class GBARandomizer extends Randomizer {
 	}
 	
 	private void randomizeOtherThingsIfNecessary(String seed) {
+		Set<Integer> promotionItemIds = new HashSet<Integer>();
+		switch (gameType) {
+			case FE6:
+				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				break;
+			case FE7:
+				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				break;
+			case FE8:
+				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				break;
+			default:
+				break;
+		}
+		System.out.println("    // " + sourcePath);
+		for (GBAFEChapterData chapter : chapterData.allChapters()) {
+			List<GBAFEChapterItemData> combinedRewards = new ArrayList<GBAFEChapterItemData>();
+			System.out.println();
+			System.out.println("    // " + chapter.getFriendlyName());
+			for (GBAFEChapterUnitData unit : chapter.allUnits()) {
+				if (unit.isEnemy() || unit.isNPC()) {
+					GBAFEItemData[] arr = new GBAFEItemData[]{
+						itemData.itemWithID(unit.getItem1()),
+						itemData.itemWithID(unit.getItem2()),
+						itemData.itemWithID(unit.getItem3()),
+						itemData.itemWithID(unit.getItem4())
+					};
+					for (int i = 0; i < 4; i++) {
+						GBAFEItemData itemData = arr[i];
+						if (itemData == null) continue;
+						if (promotionItemIds.contains(itemData.getID())) {
+							System.out.println("    Inventory 0x" + Long.toHexString(unit.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemData.getID()) + " 0x" + String.format("%02X", unit.getCharacterNumber()) + " " + i + " // " + itemData.displayString());
+						}
+					}
+				}
+			}
+			for (GBAFEChapterItemData chapterItem : chapter.allRewards()) {
+				combinedRewards.add(chapterItem);
+			}
+			for (GBAFEChapterItemData chapterItem : chapter.allTargetedRewards()) {
+				combinedRewards.add(chapterItem);
+			}
+			for (GBAFEChapterItemData chapterItem : combinedRewards) {
+				int itemID = chapterItem.getItemID();
+				GBAFEItemData i = itemData.itemWithID(itemID);
+				if (chapterItem instanceof GBAFEChapterTargetedItemData) {
+					GBAFEChapterTargetedItemData x = (GBAFEChapterTargetedItemData)chapterItem;
+					int targetId = x.getTargetID();
+					System.out.println("    " + chapterItem.getRewardType() + " 0x" + Long.toHexString(chapterItem.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemID) + " 0x" + String.format("%02X", targetId) + " // " + i.displayString());
+				} else {
+					System.out.println("    " + chapterItem.getRewardType() + " 0x" + Long.toHexString(chapterItem.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemID) + " // " + i.displayString());
+				}
+			}
+		}
+
 		if (miscOptions != null) {
 			if (miscOptions.randomizeRewards) {
 				updateStatusString("Randomizing rewards...");
