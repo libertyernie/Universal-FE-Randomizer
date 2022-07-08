@@ -583,37 +583,28 @@ public class GBARandomizer extends Randomizer {
 		Set<Integer> promotionItemIds = new HashSet<Integer>();
 		switch (gameType) {
 			case FE6:
-				System.out.println("    type Item =");
-				for (FE6Data.Item item : FE6Data.Item.values()) System.out.println("    | " + item + " = " + item.ID);
-				System.out.println("");
-				System.out.println("    let PromotionItems = set [");
-				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) {
-					promotionItemIds.add(item.getID());
-					System.out.println("        Item." + item);
+				System.out.println("    let Items = [");
+				for (FE6Data.Item item : FE6Data.Item.values()) {
+					System.out.println("        item 0x" + Integer.toHexString(item.getID()) + " \"" + item + "\" " + (item.isPromotionItem() ? "Promotion" : item.isStatBooster() ? "StatBooster" : "Other"));
 				}
 				System.out.println("    ]");
+				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
 				break;
 			case FE7:
-				System.out.println("    type Item =");
-				for (FE7Data.Item item : FE7Data.Item.values()) System.out.println("    | " + item + " = " + item.ID);
-				System.out.println("");
-				System.out.println("    let PromotionItems = set [");
-				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) {
-					promotionItemIds.add(item.getID());
-					System.out.println("        Item." + item);
+				System.out.println("    let Items = [");
+				for (FE7Data.Item item : FE7Data.Item.values()) {
+					System.out.println("        item 0x" + Integer.toHexString(item.getID()) + " \"" + item + "\" " + (item.isPromotionItem() ? "Promotion" : item.isStatBooster() ? "StatBooster" : "Other"));
 				}
 				System.out.println("    ]");
+				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
 				break;
 			case FE8:
-				System.out.println("    type Item =");
-				for (FE8Data.Item item : FE8Data.Item.values()) System.out.println("    | " + item + " = " + item.ID);
-				System.out.println("");
-				System.out.println("    let PromotionItems = set [");
-				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) {
-					promotionItemIds.add(item.getID());
-					System.out.println("        Item." + item);
+				System.out.println("    let Items = [");
+				for (FE8Data.Item item : FE8Data.Item.values()) {
+					System.out.println("        item 0x" + Integer.toHexString(item.getID()) + " \"" + item + "\" " + (item.isPromotionItem() ? "Promotion" : item.isStatBooster() ? "StatBooster" : "Other"));
 				}
 				System.out.println("    ]");
+				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
 				break;
 			default:
 				break;
@@ -635,7 +626,7 @@ public class GBARandomizer extends Randomizer {
 						GBAFEItemData itemData = arr[i];
 						if (itemData == null) continue;
 						if (promotionItemIds.contains(itemData.getID())) {
-							System.out.println("    Inventory 0x" + Long.toHexString(unit.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemData.getID()) + " 0x" + String.format("%02X", unit.getCharacterNumber()) + " " + i + " // " + itemData.displayString());
+							System.out.println("    Unit 0x" + Long.toHexString(unit.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemData.getID()) + " 0x" + String.format("%02X", unit.getCharacterNumber()) + " " + i + " // " + itemData.displayString());
 						}
 					}
 				}
@@ -654,7 +645,7 @@ public class GBARandomizer extends Randomizer {
 					int targetId = x.getTargetID();
 					System.out.println("    " + chapterItem.getRewardType() + " 0x" + Long.toHexString(chapterItem.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemID) + " 0x" + String.format("%02X", targetId) + " // " + i.displayString());
 				} else {
-					System.out.println("    " + chapterItem.getRewardType() + " 0x" + Long.toHexString(chapterItem.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemID) + " // " + i.displayString());
+					System.out.println("    " + chapterItem.getRewardType() + " 0x" + Long.toHexString(chapterItem.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemID) + " // " + (i == null ? "" : i.displayString()));
 				}
 			}
 		}
