@@ -583,13 +583,37 @@ public class GBARandomizer extends Randomizer {
 		Set<Integer> promotionItemIds = new HashSet<Integer>();
 		switch (gameType) {
 			case FE6:
-				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				System.out.println("    type Item =");
+				for (FE6Data.Item item : FE6Data.Item.values()) System.out.println("    | " + item + " = " + item.ID);
+				System.out.println("");
+				System.out.println("    let PromotionItems = set [");
+				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) {
+					promotionItemIds.add(item.getID());
+					System.out.println("        Item." + item);
+				}
+				System.out.println("    ]");
 				break;
 			case FE7:
-				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				System.out.println("    type Item =");
+				for (FE7Data.Item item : FE7Data.Item.values()) System.out.println("    | " + item + " = " + item.ID);
+				System.out.println("");
+				System.out.println("    let PromotionItems = set [");
+				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) {
+					promotionItemIds.add(item.getID());
+					System.out.println("        Item." + item);
+				}
+				System.out.println("    ]");
 				break;
 			case FE8:
-				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				System.out.println("    type Item =");
+				for (FE8Data.Item item : FE8Data.Item.values()) System.out.println("    | " + item + " = " + item.ID);
+				System.out.println("");
+				System.out.println("    let PromotionItems = set [");
+				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) {
+					promotionItemIds.add(item.getID());
+					System.out.println("        Item." + item);
+				}
+				System.out.println("    ]");
 				break;
 			default:
 				break;
