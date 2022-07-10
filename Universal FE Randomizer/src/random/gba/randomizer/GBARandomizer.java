@@ -580,7 +580,7 @@ public class GBARandomizer extends Randomizer {
 	}
 	
 	private void randomizeOtherThingsIfNecessary(String seed) {
-		Set<Integer> promotionItemIds = new HashSet<Integer>();
+		Set<Integer> relevantItemIds = new HashSet<Integer>();
 		switch (gameType) {
 			case FE6:
 				System.out.println("    let Items = [");
@@ -588,7 +588,8 @@ public class GBARandomizer extends Randomizer {
 					System.out.println("        item 0x" + Integer.toHexString(item.getID()) + " \"" + item + "\" " + (item.isPromotionItem() ? "Promotion" : item.isStatBooster() ? "StatBooster" : "Other"));
 				}
 				System.out.println("    ]");
-				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				for (FE6Data.Item item : FE6Data.Item.allPromotionItems) relevantItemIds.add(item.getID());
+				for (FE6Data.Item item : FE6Data.Item.allStatBoosters) relevantItemIds.add(item.getID());
 				break;
 			case FE7:
 				System.out.println("    let Items = [");
@@ -596,7 +597,8 @@ public class GBARandomizer extends Randomizer {
 					System.out.println("        item 0x" + Integer.toHexString(item.getID()) + " \"" + item + "\" " + (item.isPromotionItem() ? "Promotion" : item.isStatBooster() ? "StatBooster" : "Other"));
 				}
 				System.out.println("    ]");
-				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				for (FE7Data.Item item : FE7Data.Item.allPromotionItems) relevantItemIds.add(item.getID());
+				for (FE7Data.Item item : FE7Data.Item.allStatBoosters) relevantItemIds.add(item.getID());
 				break;
 			case FE8:
 				System.out.println("    let Items = [");
@@ -604,7 +606,8 @@ public class GBARandomizer extends Randomizer {
 					System.out.println("        item 0x" + Integer.toHexString(item.getID()) + " \"" + item + "\" " + (item.isPromotionItem() ? "Promotion" : item.isStatBooster() ? "StatBooster" : "Other"));
 				}
 				System.out.println("    ]");
-				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) promotionItemIds.add(item.getID());
+				for (FE8Data.Item item : FE8Data.Item.allPromotionItems) relevantItemIds.add(item.getID());
+				for (FE8Data.Item item : FE8Data.Item.allStatBoosters) relevantItemIds.add(item.getID());
 				break;
 			default:
 				break;
@@ -625,7 +628,7 @@ public class GBARandomizer extends Randomizer {
 					for (int i = 0; i < 4; i++) {
 						GBAFEItemData itemData = arr[i];
 						if (itemData == null) continue;
-						if (promotionItemIds.contains(itemData.getID())) {
+						if (relevantItemIds.contains(itemData.getID())) {
 							System.out.println("    Unit 0x" + Long.toHexString(unit.getAddressOffset()).toUpperCase() + " 0x" + String.format("%02X", itemData.getID()) + " 0x" + String.format("%02X", unit.getCharacterNumber()) + " " + i + " // " + itemData.displayString());
 						}
 					}
